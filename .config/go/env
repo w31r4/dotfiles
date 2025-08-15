@@ -1,0 +1,2 @@
+GOFLAGS=-buildvcs=false
+GOPROXY=https://goproxy.cn,direct
