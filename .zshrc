@@ -79,6 +79,9 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
 	git
+	git-commit
+	git-extras
+	gitignore
 	sudo
 	z
 	zsh-syntax-highlighting 
@@ -102,7 +105,8 @@ plugins=(
     uv
     docker
     httpie
-    copybuffer
+    copybuffer	
+	eza
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -165,6 +169,20 @@ alias l.="eza -a | grep -E '^\.'"
 alias tree="eza --tree --icons"
 # 复制文件到 WSL home 目录的别名
 alias cp_zenfun='cp /mnt/c/Users/zenfun/'
+# --- My Custom Network Aliases ---
+
+# 为 gping 创建一个更短的别名
+alias gp='gping'
+
+# 为 mtr 创建一个别名，直接进入报告模式 (执行10次后退出并显示总结)
+# 这对于写脚本或者快速获取总结报告非常有用
+alias mtrr='mtr --report -c 10'
+
+# 为 mtr 创建一个强制使用 IPv4 的别名
+alias mtr4='mtr -4'
+
+# 为 mtr 创建一个强制使用 IPv6 的别名
+alias mtr6='mtr -6'
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
