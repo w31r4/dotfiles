@@ -183,7 +183,7 @@ config checkout
 
 ```bash
 mkdir -p .dotfiles-backup
-config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .dotfiles-backup/{}
+config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} sh -c 'mkdir -p ".dotfiles-backup/$(dirname "{}")" && mv "{}" ".dotfiles-backup/{}"'
 ```
 
 这个命令会找出所有冲突的文件，然后把它们移动到 `.dotfiles-backup` 文件夹里。
