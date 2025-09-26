@@ -265,3 +265,5 @@ typora() {
   fi
 }
 alias config='/usr/bin/git --git-dir=/home/zenfun/.dotfiles/ --work-tree=/home/zenfun'
+autoload -U compinit; compinit
+eval $(keychain --eval --quiet id_rsa)
