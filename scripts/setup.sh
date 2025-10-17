@@ -143,7 +143,7 @@ main() {
 
     install_zsh
     clone_dotfiles_repo
-    setup_alias
+    setup_config_command  # <--- 修改成调用新的函数！    
     checkout_files
     init_submodules
 
