@@ -116,3 +116,5 @@ fi
 export NEMU_HOME=/home/zenfun/workspace/ics2024/nemu
 
 export AM_HOME=/home/zenfun/workspace/ics2024/abstract-machine
+
+[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.

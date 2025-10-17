@@ -45,12 +45,12 @@ config commit -m "更新各类配置文件"
 
 **核心思想是：**
 
-我们创建一个特殊的 Git 仓库（裸仓库），它的 `.git` 目录不和你的项目文件放在一起，而是独立存放。然后，我们通过一个**别名（alias）**，“欺骗” Git，让它在你的 Home 目录 (`~`) 下工作，但版本记录却存储在那个独立的裸仓库里。
+我们创建一个特殊的 Git 仓库（裸仓库），它的 `.git` 目录不和你的项目文件放在一起，而是独立存放。然后，我们通过一个**别名（alias）**，“欺骗”Git，让它在你的 Home 目录 (`~`) 下工作，但版本记录却存储在那个独立的裸仓库里。
 
 **打个比方：**
 
-  * **普通 `git init`**：就像你在一个文件夹里同时存放了“工作文件”和“版本记录档案室(`.git`)”。
-  * **裸仓库方案**：你把“版本记录档案室”建在了别处（比如 `~/.dotfiles`），然后给你的“档案管理员(Git)”一个特殊的指令，让他去你的“主办公区(`~`)”整理文件，但把所有档案都放回那个独立的档案室。
+  * **普通 `git init`**：就像你在一个文件夹里同时存放了“工作文件”和“版本记录档案室 (`.git`)”。
+  * **裸仓库方案**：你把“版本记录档案室”建在了别处（比如 `~/.dotfiles`），然后给你的“档案管理员 (Git)”一个特殊的指令，让他去你的“主办公区 (`~`)”整理文件，但把所有档案都放回那个独立的档案室。
 
 这样做的好处是，这个 Git 系统**只会关心你明确让它追踪的文件**（比如 `.zshrc`），而完全忽略你 Home 目录下的其他所有文件和文件夹。干净、优雅、无副作用。
 
@@ -60,7 +60,7 @@ config commit -m "更新各类配置文件"
 
 现在，我们来动手实现它。
 
-#### 第1步：创建裸仓库
+#### 第 1 步：创建裸仓库
 
 首先，我们要在 Home 目录下创建一个地方来存放版本记录。
 打开你的终端，运行：
@@ -72,7 +72,7 @@ git init --bare $HOME/.dotfiles
   * `git init --bare`：创建一个裸仓库（只有版本信息，没有工作区文件）。
   * `$HOME/.dotfiles`：存放这个仓库的地方。你可以叫任何名字，但 `.dotfiles` 是一个常见的约定。
 
-#### 第2步：创建核心别名 (Alias)
+#### 第 2 步：创建核心别名 (Alias)
 
 这是最关键的一步。我们将创建一个名为 `config` 的新命令，它本质上是 Git，但只为我们的 Dotfiles 工作。
 
@@ -103,7 +103,7 @@ source ~/.zshrc
 
 现在，`config` 命令就可以像 `git` 一样使用了，但它只为你的 Dotfiles 服务！
 
-#### 第3步：配置仓库，避免混乱
+#### 第 3 步：配置仓库，避免混乱
 
 默认情况下，`config status` 会显示你 Home 目录下所有未被追踪的文件，这同样会造成信息爆炸。我们用下面的命令让它只显示我们手动添加（`add`）过的文件。
 
@@ -111,7 +111,7 @@ source ~/.zshrc
 config config --local status.showUntrackedFiles no
 ```
 
-#### 第4步：开始追踪你的第一个 Dotfile！
+#### 第 4 步：开始追踪你的第一个 Dotfile！
 
 现在，我们可以像使用普通 Git 一样，开始追踪你的配置文件了。
 
@@ -145,7 +145,7 @@ config config --local status.showUntrackedFiles no
 
 这才是这个方案真正闪光的地方！假设你换了一台新电脑。
 
-#### 第1步：克隆你的裸仓库
+#### 第 1 步：克隆你的裸仓库
 
 在新电脑的终端上，把你的配置仓库克隆下来：
 
@@ -153,7 +153,7 @@ config config --local status.showUntrackedFiles no
 git clone --bare git@github.com:<你的用户名>/dotfiles.git $HOME/.dotfiles
 ```
 
-#### 第2步：设置别名
+#### 第 2 步：设置别名
 
 和之前一样，设置 `config` 别名，并让它永久生效。
 
@@ -167,7 +167,7 @@ echo "alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" 
 source ~/.zshrc
 ```
 
-#### 第3步：检出 (Checkout) 你的配置文件
+#### 第 3 步：检出 (Checkout) 你的配置文件
 
 现在，用一个命令把你所有的配置“激活”到 Home 目录下：
 
@@ -194,7 +194,7 @@ config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} sh -c 'mkdi
 config checkout
 ```
 
-#### 第4步：完成收尾工作
+#### 第 4 步：完成收尾工作
 
 最后，别忘了再次设置 `status.showUntrackedFiles`：
 
@@ -296,8 +296,8 @@ echo "Custom software installation complete."
 Windows 上的现代化包管理器也能做到这一点。
 
   * **Winget (系统自带):**
-      * **导出:** `winget export -o packages.json`
-      * **导入:** `winget import -i packages.json`
+      * **导出：** `winget export -o packages.json`
+      * **导入：** `winget import -i packages.json`
   * **Scoop / Chocolatey:** 也有类似的导出/导入已安装软件列表的机制。
 
 -----

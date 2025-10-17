@@ -83,7 +83,6 @@ plugins=(
 	git-extras
 	gitignore
 	sudo
-	z
 	zsh-syntax-highlighting 
 	zsh-autosuggestions
 	zsh-pipx
@@ -267,3 +266,13 @@ typora() {
 alias config='/usr/bin/git --git-dir=/home/zenfun/.dotfiles/ --work-tree=/home/zenfun'
 autoload -U compinit; compinit
 eval $(keychain --eval --quiet id_rsa)
+
+[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+eval "$(zoxide init zsh)"
