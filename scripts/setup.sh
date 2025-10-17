@@ -25,6 +25,35 @@ warn() {
     printf "${YELLOW}WARN: %s${NC}\n" "$1"
 }
 
+# 步骤0: 检查并安装 Zsh
+install_zsh() {
+    if command -v zsh &> /dev/null; then
+        info "Zsh is already installed."
+        return
+    fi
+
+    warn "Zsh is not installed. Attempting to install..."
+    if command -v apt-get &> /dev/null; then
+        info "Detected Debian/Ubuntu. Installing zsh with apt..."
+        sudo apt-get update
+        sudo apt-get install -y zsh
+    elif command -v brew &> /dev/null; then
+        info "Detected macOS. Installing zsh with Homebrew..."
+        brew install zsh
+    else
+        warn "Could not find a supported package manager (apt, brew)."
+        echo "Please install Zsh manually, then re-run this script."
+        exit 1
+    fi
+
+    if ! command -v zsh &> /dev/null; then
+        echo "Error: Zsh installation failed. Please install it manually." >&2
+        exit 1
+    fi
+    info "Zsh has been successfully installed."
+}
+
+
 # 步骤1: 克隆裸仓库
 clone_dotfiles_repo() {
     if [ -d "$DOTFILES_DIR" ]; then
@@ -55,7 +84,7 @@ setup_alias() {
         echo "$alias_cmd" >> "$HOME/.zshrc"
     fi
     
-    # 在当前会话中临时设置别名，以便后续步骤使用
+    # 关键！在当前脚本会话中激活别名，以便后续步骤使用
     eval "$alias_cmd"
 }
 
@@ -63,14 +92,11 @@ setup_alias() {
 checkout_files() {
     info "Checking out dotfiles..."
     
-    # 配置仓库，不显示未追踪的文件
     config config --local status.showUntrackedFiles no
 
-    # 尝试检出
     if config checkout; then
         info "Checkout successful."
     else
-        # 如果检出失败（因为覆盖了现有文件），则先备份冲突文件
         warn "Checkout conflict detected. Backing up conflicting files to ~/.dotfiles-backup..."
         
         local backup_dir="$HOME/.dotfiles-backup"
@@ -82,7 +108,6 @@ checkout_files() {
             mv "$file" "$dest/" || warn "Could not move $file"
         done
 
-        # 再次尝试检出
         if config checkout; then
             info "Checkout successful after backing up conflicting files."
         else
@@ -111,6 +136,7 @@ main() {
         exit 1
     fi
 
+    install_zsh
     clone_dotfiles_repo
     setup_alias
     checkout_files
@@ -122,9 +148,10 @@ main() {
     info "--------------------------------------------------"
     echo
     echo "Next steps:"
-    echo "1. Restart your shell or run 'exec zsh -l' to apply all changes."
-    echo "2. Start tmux by running 'tmux'."
-    echo "3. Inside tmux, press '<prefix> + I' (e.g., Ctrl-b + I) to install your declared plugins."
+    echo "1. Set Zsh as your default shell by running: chsh -s \$(which zsh)"
+    echo "2. Log out and log back in for the default shell change to take effect."
+    echo "3. Start tmux by running 'tmux'."
+    echo "4. Inside tmux, press '<prefix> + I' (e.g., Ctrl-b + I) to install your declared plugins."
     echo
 }
 

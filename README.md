@@ -24,7 +24,7 @@ config commit -m "更新各类配置文件"
 在新机器上，只需一行命令即可开始自动化部署。它会克隆仓库、检出配置并初始化 `oh-my-tmux` 子模块。
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/w31r4/dotfiles/main/scripts/setup.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/w31r4/dotfiles/refs/heads/main/scripts/setup.sh)"
 
 ```
 
