@@ -7,4 +7,4 @@ cookie.*
 .git-credentials
 hosts
 /gh
-
+/.config/tmux/plugins/
