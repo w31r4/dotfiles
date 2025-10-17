@@ -68,24 +68,29 @@ clone_dotfiles_repo() {
 }
 
 # 步骤2: 定义 config 别名并写入 shell 配置文件
-setup_alias() {
-    local alias_cmd="alias config='/usr/bin/git --git-dir=$DOTFILES_DIR/ --work-tree=$HOME'"
-    
+# 新版本，使用 function，更稳健！
+setup_config_command() {
+    # 定义一个名为 config 的函数
+    config() {
+        /usr/bin/git --git-dir="$DOTFILES_DIR/" --work-tree="$HOME" "$@"
+    }
+
+    # 将函数导出，使其在脚本的子进程中也可用
+    export -f config
+
     # 检查 zshrc 是否存在
-    if [ ! -f "$HOME/.zshrc" ]; then
-        touch "$HOME/.zshrc"
+    local zshrc_file="$HOME/.zshrc"
+    if [ ! -f "$zshrc_file" ]; then
+        touch "$zshrc_file"
     fi
 
-    if grep -q "alias config=" "$HOME/.zshrc"; then
-        info "Config alias already exists in ~/.zshrc."
-    else
-        info "Adding config alias to ~/.zshrc."
-        echo -e "\n# Alias for dotfiles bare repository management" >> "$HOME/.zshrc"
-        echo "$alias_cmd" >> "$HOME/.zshrc"
+    # 仍然将 alias 写入 .zshrc，供你日后在交互式终端中使用
+    local alias_cmd="alias config='/usr/bin/git --git-dir=$DOTFILES_DIR/ --work-tree=$HOME'"
+    if ! grep -q "$alias_cmd" "$zshrc_file"; then
+        info "Adding config alias to ~/.zshrc for interactive use."
+        echo -e "\n# Alias for dotfiles bare repository management" >> "$zshrc_file"
+        echo "$alias_cmd" >> "$zshrc_file"
     fi
-    
-    # 关键！在当前脚本会话中激活别名，以便后续步骤使用
-    eval "$alias_cmd"
 }
 
 # 步骤3: 检出配置文件
