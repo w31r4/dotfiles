@@ -19,24 +19,42 @@ config commit -m "更新各类配置文件"
 
 ---
 
-## 🚀 快速开始：一键部署
+## 🚀 快速开始：使用 `dotm` 部署
 
-在新机器上，只需一行命令即可开始自动化部署。它会克隆仓库、检出配置并初始化 `oh-my-tmux` 子模块。
+我们引入了一个全新的 Go 工具 `dotm` (位于 `scripts/dotm` 目录) 来替代旧的 `setup.sh` 脚本，提供更强大、更灵活的部署体验。
 
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/w31r4/dotfiles/refs/heads/main/scripts/setup.sh)"
+在新机器上部署分为两步：
 
-```
+#### 第 1 步：编译工具并同步 Dotfiles
 
-> **注意**：如果你的默认分支不是 `main`，请相应修改 URL。
-
-部署脚本执行完毕后，请手动执行以下命令以应用所有变更：
+首先，我们需要编译 `dotm` 工具，然后使用它来克隆并检出您的配置文件。
 
 ```bash
-exec zsh -l
+# 编译 dotm 工具
+cd scripts/dotm
+go build
+
+# 使用 dotm 同步您的裸仓库
+# 请将 URL 替换为您自己的仓库地址
+./dotm repo sync --url git@github.com:w31r4/dotfiles.git
 ```
 
-进入 `tmux` 后，按 `<prefix> + I` (默认为 `Ctrl+b` 然后 `I`) 来安装你在 `tmux.conf.local` 中声明的其他 Tmux 插件。
+#### 第 2 步：按需安装软件环境
+
+`dotm` 的核心是 `scripts/dotm/config.yaml` 文件，它现在是您所有软件和环境的“清单”。您可以按需安装任何在其中定义的模块。
+
+```bash
+# 安装单个模块
+./dotm install zsh
+
+# 一次性安装多个核心模块
+./dotm install zsh pyenv go fzf eza
+
+# 您可以随时通过 `dotm module list` 查看所有可安装的模块
+./dotm module list
+```
+
+部署完成后，请重新加载您的 Shell (`exec zsh -l`) 以使所有变更生效。关于 `dotm` 的更多高级用法（如添加/删除模块），请参阅 `scripts/dotm/README_zh-CN.md`。
 
 ---
 
@@ -131,45 +149,22 @@ config push
 
 这样做的好处是，Git 系统**只会关心你明确让它追踪的文件**，而完全忽略 Home 目录下的其他所有文件。干净、优雅、无副作用。
 
-### 第三部分：环境自动化进阶
+### 第三部分：环境自动化进阶 (全新 `dotm` 方案)
 
-一个真正可移植的环境，需要两条腿走路：
+> **Dotfiles (配置文件) + Installation Tool (`dotm`) = 终极开发环境**
 
-> **Dotfiles (配置文件) + Installation Scripts (安装脚本) = 终极开发环境**
+过去，我们推荐使用 `Brewfile` 或 `apt` 命令来管理软件包列表。现在，这个过程已被 `dotm` 的模块化系统完全取代。
 
-除了备份“配置”，我们还应该备份一个能自动安装所需软件的“清单”或“脚本”。
+您所有的软件安装需求，都统一在 `scripts/dotm/config.yaml` 文件中以“模块”的形式进行管理。
 
-#### macOS (使用 Homebrew)
+**`config.yaml` 的优势：**
 
-1.  **在旧电脑上导出软件列表**：
-    ```bash
-    brew bundle dump --file="Brewfile"
-    ```
-2.  **将 `Brewfile` 加入 Dotfiles 仓库**：
-    ```bash
-    config add Brewfile
-    config commit -m "Add Brewfile for macOS"
-    config push
-    ```
-3.  **在新电脑上恢复**：
-    ```bash
-    # 确保 Homebrew 已安装
-    brew bundle install --file="Brewfile"
-    ```
+- **统一管理**：无论是 macOS 还是 Linux，所有软件安装逻辑都在一个文件中。
+- **声明式**：清晰地定义了软件的检查方法、安装命令和依赖关系。
+- **版本可控**：`config.yaml` 本身也通过 Git 进行版本控制。
+- **可扩展**：通过 `dotm module add` 命令，您可以轻松地向“仓库”中添加新软件，而无需编写复杂的脚本。
 
-#### Linux (Debian/Ubuntu, 使用 APT)
-
-1.  **在旧电脑上生成手动安装的软件包清单**：
-    ```bash
-    apt-mark showmanual > packages.list
-    ```
-2.  **将 `packages.list` 加入仓库**。
-3.  **在新电脑上恢复**：
-    ```bash
-    sudo apt-get update
-    sudo xargs -a packages.list apt-get install -y
-    ```
-我们的 `setup.sh` 脚本可以集成这些逻辑，使其更加自动化。
+这个新的方案，将“安装脚本”本身也变成了“配置文件”，是“配置即代码”理念的终极体现。
 
 ----------------------------------------------------
 
