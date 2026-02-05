@@ -7,11 +7,15 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# 你的 GitHub 用户名和仓库名
-GITHUB_USER="w31r4"
-REPO_NAME="dotfiles"
-DOTFILES_DIR="$HOME/.dotfiles"
-REMOTE_URL="git@github.com:$GITHUB_USER/$REPO_NAME.git"
+# 你的 GitHub 用户名和仓库名（可用环境变量覆盖）
+GITHUB_USER="${GITHUB_USER:-w31r4}"
+REPO_NAME="${REPO_NAME:-dotfiles}"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
+
+# 默认用 HTTPS 克隆（新机器无需提前配置 SSH Key）。
+# 如需用 SSH：运行脚本前设置 REMOTE_URL=git@github.com:<user>/<repo>.git
+DEFAULT_REMOTE_HTTPS="https://github.com/${GITHUB_USER}/${REPO_NAME}.git"
+REMOTE_URL="${REMOTE_URL:-$DEFAULT_REMOTE_HTTPS}"
 
 # --- 函数定义 ---
 
