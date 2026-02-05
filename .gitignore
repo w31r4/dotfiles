@@ -9,3 +9,10 @@ cookie.*
 hosts
 /gh
 /.config/tmux/plugins/
+
+# Generated / telemetry / local state (keep out of dotfiles repo)
+.config/astro/config.json
+.config/configstore/reactNativeToolsConfig.json
+.config/github-copilot/versions.json
+.config/gopls/prompt/telemetry
+.config/uv/uv-receipt.json
