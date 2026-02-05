@@ -4,6 +4,7 @@ cookie
 cookie.*
 # 忽略其他敏感信息和本地状态
 .bash_history
+.npmrc
 .git-credentials
 hosts
 /gh
