@@ -1,490 +1,712 @@
-### 快速使用小妙招
- 1. 一次性将所有修改过的文件加入暂存区
-config add -u
 
- 2. 提交
-config commit -m "更新各类配置文件"
-# 我的 Dotfiles
 
-这不仅仅是我的个人配置文件备份，更是一套自动化、可移植的开发环境部署方案。它基于 Git 裸仓库（Bare Repository）方案，并集成了 Zsh、Tmux、oh-my-tmux 等工具的模块化配置。
+<p align="center">
+    <img src="images/logo.png" alt="SSHM Logo" width="120" />
+</p>
 
-## 核心理念
+# 🚀 SSHM - SSH Manager
 
-- **配置即代码**：所有环境设置都通过 Git 进行版本控制，改动可追溯，恢复有保障。
-- **裸仓库方案**：优雅地在 `$HOME` 目录下管理点文件，无污染，不冲突。
-- **自动化部署**：通过一个脚本，在新机器上快速恢复熟悉的工作环境。
-- **模块化与分离**：
-    - **Zsh**：配置按 `~/.zshenv` (全局环境)、`~/.zprofile` (登录环境)、`~/.zshrc` (交互环境) 分层，清晰且高效。
-    - **Tmux**：遵循 XDG 规范，配置存放于 `~/.config/tmux`；使用 `oh-my-tmux` (子模块) 作为基础，`TPM` 已被其集成，个人定制与上游更新完全分离。
+[![Go](https://img.shields.io/badge/Go-1.23+-00ADD8?style=for-the-badge&logo=go)](https://golang.org/)
+[![Release](https://img.shields.io/github/v/release/Gu1llaum-3/sshm?style=for-the-badge)](https://github.com/Gu1llaum-3/sshm/releases)
+[![License](https://img.shields.io/github/license/Gu1llaum-3/sshm?style=for-the-badge)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey?style=for-the-badge)](https://github.com/Gu1llaum-3/sshm/releases)
+
+> **A modern, interactive SSH Manager for your terminal** 🔥
+
+SSHM is a beautiful command-line tool that transforms how you manage and connect to your SSH hosts. Built with Go and featuring an intuitive TUI interface, it makes SSH connection management effortless and enjoyable.
+
+<p align="center">
+    <a href="images/sshm.gif" target="_blank">
+        <img src="images/sshm.gif" alt="Demo SSHM Terminal" width="800" />
+    </a>
+    <br>
+    <em>🖱️ Click on the image to view in full size</em>
+</p>
+
+## ✨ Features
+
+### 🚀 **Core Capabilities**
+- **🎨 Beautiful TUI Interface** - Navigate your SSH hosts with an elegant, interactive terminal UI
+- **⚡ Quick Connect** - Connect to any host instantly through the TUI or the CLI with `sshm <host>`
+- **🔄 Port Forwarding** - Easy setup for Local, Remote, and Dynamic (SOCKS) forwarding with history persistence
+- **📝 Easy Management** - Add, edit, move, and manage SSH configurations seamlessly
+- **🏷️ Tag Support** - Organize your hosts with custom tags for better categorization
+- **🔍 Smart Search** - Find hosts quickly with built-in filtering and search
+- **📝 Real-time Status** - Live SSH connectivity indicators with asynchronous ping checks and color-coded status
+- **🔔 Smart Updates** - Automatic version checking with update notifications
+- **📈 Connection History** - Track your SSH connections with last login timestamps
+
+### 🛠️ **Technical Features**
+- **🔒 Secure** - Works directly with your existing `~/.ssh/config` file
+- **📁 Custom Config Support** - Use any SSH configuration file with the `-c` flag
+- **📂 SSH Include Support** - Full support for SSH Include directives to organize configurations across multiple files
+- **⚙️ SSH Options Support** - Add any SSH configuration option through intuitive forms
+- **🔄 Automatic Conversion** - Seamlessly converts between command-line and config formats
+- **🔄 Automatic Backups** - Backup configurations automatically before changes
+- **✅ Validation** - Prevent configuration errors with built-in validation
+- **🔗 ProxyJump Support** - Secure connection tunneling through bastion hosts
+- **⌨️ Keyboard Shortcuts** - Power user navigation with vim-like shortcuts
+- **🌐 Cross-platform** - Supports Linux, macOS (Intel & Apple Silicon), and Windows
+- **⚡ Lightweight** - Single binary with no dependencies, zero configuration required
+
+## 🚀 Quick Start
+
+### Installation
+
+**Homebrew (Recommended for macOS):**
+```bash
+brew install Gu1llaum-3/sshm/sshm
+```
+
+**Unix/Linux/macOS (One-line install):**
+```bash
+curl -sSL https://raw.githubusercontent.com/Gu1llaum-3/sshm/main/install/unix.sh | bash
+```
+
+**Windows (PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/Gu1llaum-3/sshm/main/install/windows.ps1 | iex
+```
+
+**Alternative methods:**
+
+*Linux/macOS:*
+```bash
+# Download specific release
+wget https://github.com/Gu1llaum-3/sshm/releases/latest/download/sshm-linux-amd64.tar.gz
+
+# Extract and install
+tar -xzf sshm-linux-amd64.tar.gz
+sudo mv sshm-linux-amd64 /usr/local/bin/sshm
+```
+
+*Windows:*
+```powershell
+# Download and extract
+Invoke-WebRequest -Uri "https://github.com/Gu1llaum-3/sshm/releases/latest/download/sshm-windows-amd64.zip" -OutFile "sshm-windows-amd64.zip"
+Expand-Archive sshm-windows-amd64.zip -DestinationPath C:\tools\
+# Add C:\tools to your PATH environment variable
+```
+
+## 📖 Usage
+
+### Interactive Mode
+
+Launch SSHM without arguments to enter the beautiful TUI interface:
+
+```bash
+sshm
+```
+
+**Navigation:**
+- `↑/↓` or `j/k` - Navigate hosts
+- `Enter` - Connect to selected host
+- `a` - Add new host
+- `e` - Edit selected host
+- `d` - Delete selected host
+- `m` - Move host to another config file (requires SSH Include directives)
+- `f` - Port forwarding setup
+- `q` - Quit
+- `/` - Search/filter hosts
+
+**Real-time Status Indicators:**
+- 🟢 **Online** - Host is reachable via SSH
+- 🟡 **Connecting** - Currently checking host connectivity
+- 🔴 **Offline** - Host is unreachable or SSH connection failed
+- ⚫ **Unknown** - Connectivity status not yet determined
+
+**Sorting & Filtering:**
+- `s` - Switch between sorting modes (name ↔ last login)
+- `n` - Sort by **name** (alphabetical)
+- `r` - Sort by **recent** (last login time)
+- `Tab` - Cycle between filtering modes
+- Filter by **name** (default) - Search through host names
+- Filter by **last login** - Sort and filter by most recently used connections
+
+The interactive forms will guide you through configuration:
+- **Hostname/IP** - Server address
+- **Username** - SSH user
+- **Port** - SSH port (default: 22)
+- **Identity File** - Private key path
+- **ProxyJump** - Jump server for connection tunneling
+- **SSH Options** - Additional SSH options in `-o` format (e.g., `-o Compression=yes -o ServerAliveInterval=60`)
+- **Tags** - Comma-separated tags for organization
+
+### Port Forwarding
+
+SSHM provides an intuitive interface for setting up SSH port forwarding. Press `f` while selecting a host to open the port forwarding setup:
+
+**Forward Types:**
+- **Local (-L)** - Forward a local port to a remote host/port through the SSH connection
+  - Example: Access a remote database on `localhost:5432` via local port `15432`
+  - Use case: `ssh -L 15432:localhost:5432 server` → Database accessible on `localhost:15432`
+
+- **Remote (-R)** - Forward a remote port back to a local host/port
+  - Example: Expose local web server on remote host's port `8080`
+  - Use case: `ssh -R 8080:localhost:3000 server` → Local app accessible from remote host's port 8080
+  - ⚠️ **Requirements for external access:**
+    - **SSH Server Config**: Add `GatewayPorts yes` to `/etc/ssh/sshd_config` and restart SSH service
+    - **Firewall**: Open the remote port in the server's firewall (`ufw allow 8080` or equivalent)
+    - **Port Availability**: Ensure the remote port is not already in use
+    - **Bind Address**: Use `0.0.0.0` for external access, `127.0.0.1` for local-only
+
+- **Dynamic (-D)** - Create a SOCKS proxy for secure browsing
+  - Example: Route web traffic through the SSH connection
+  - Use case: `ssh -D 1080 server` → Configure browser to use `localhost:1080` as SOCKS proxy
+  - ⚠️ **Configuration requirements:**
+    - **Browser Setup**: Configure SOCKS v5 proxy in browser settings
+    - **DNS**: Enable "Proxy DNS when using SOCKS v5" for full privacy
+    - **Applications**: Only SOCKS-aware applications will use the proxy
+    - **Bind Address**: Use `127.0.0.1` for security (local access only)
+
+**Port Forwarding Interface:**
+- Choose forward type with ←/→ arrow keys
+- Configure ports and addresses with guided forms
+- Optional bind address configuration (defaults to 127.0.0.1)
+- Real-time validation of port numbers and addresses
+- **Port forwarding history** - Save frequently used configurations for quick reuse
+- Connect automatically with configured forwarding options
+
+**Troubleshooting Port Forwarding:**
+
+*Remote Forwarding Issues:*
+```bash
+# Error: "remote port forwarding failed for listen port X"
+# Solutions:
+1. Check if port is already in use: ssh server "netstat -tln | grep :X"
+2. Use a different port that's available
+3. Enable GatewayPorts in SSH config for external access
+```
+
+*SSH Server Configuration for Remote Forwarding:*
+```bash
+# Edit SSH daemon config on the server:
+sudo nano /etc/ssh/sshd_config
+
+# Add or uncomment:
+GatewayPorts yes
+
+# Restart SSH service:
+sudo systemctl restart sshd  # Ubuntu/Debian/CentOS 7+
+# OR
+sudo service ssh restart     # Older systems
+```
+
+*Firewall Configuration:*
+```bash
+# Ubuntu/Debian (UFW):
+sudo ufw allow [port_number]
+
+# CentOS/RHEL/Rocky (firewalld):
+sudo firewall-cmd --add-port=[port_number]/tcp --permanent
+sudo firewall-cmd --reload
+
+# Check if port is accessible:
+telnet [server_ip] [port_number]
+```
+
+*Dynamic Forwarding (SOCKS) Browser Setup:*
+```
+Firefox: about:preferences → Network Settings
+- Manual proxy configuration
+- SOCKS Host: localhost, Port: [your_port]
+- SOCKS v5: ✓
+- Proxy DNS when using SOCKS v5: ✓
+
+Chrome: Launch with proxy
+chrome --proxy-server="socks5://localhost:[your_port]"
+```
+
+### CLI Usage
+
+SSHM provides both command-line operations and an interactive TUI interface:
+
+```bash
+# Launch interactive TUI mode for browsing and connecting to hosts
+sshm
+
+# Connect directly to a specific host (with history tracking)
+sshm my-server
+
+# Launch TUI with custom SSH config file
+sshm -c /path/to/custom/ssh_config
+
+# Connect directly with custom SSH config file
+sshm my-server -c /path/to/custom/ssh_config
+
+# Add a new host using interactive form
+sshm add
+
+# Add a new host with pre-filled hostname
+sshm add hostname
+
+# Add a new host with custom SSH config file
+sshm add hostname -c /path/to/custom/ssh_config
+
+# Edit an existing host configuration
+sshm edit my-server
+
+# Edit host with custom SSH config file
+sshm edit my-server -c /path/to/custom/ssh_config
+
+# Move a host to another SSH config file (requires Include directives)
+sshm move my-server
+
+# Move host with custom SSH config file (requires Include directives)
+sshm move my-server -c /path/to/custom/ssh_config
+
+# Search for hosts (interactive filter)
+sshm search
+
+# Show version information (includes update check)
+sshm --version
+
+# Show help and available commands
+sshm --help
+```
+
+### Direct Host Connection
+
+SSHM supports direct connection to hosts via the command line, making it easy to integrate into your existing workflow:
+
+```bash
+# Connect directly to any configured host
+sshm production-server
+sshm db-staging
+sshm web-01
+
+# All direct connections are tracked in your history
+# Use the TUI to see your most recently connected hosts
+```
+
+**Features of Direct Connection:**
+- **Instant connection** - No TUI navigation required
+- **History tracking** - All connections are recorded with timestamps
+- **Error handling** - Clear messages if host doesn't exist or configuration issues
+- **Config file support** - Works with custom config files using `-c` flag
+
+### Backup Configuration
+
+SSHM automatically creates backups of your SSH configuration files before making any changes to ensure your configurations are safe.
+
+**Backup Location:**
+- **Unix/Linux/macOS**: `~/.config/sshm/backups/` (or `$XDG_CONFIG_HOME/sshm/backups/` if set)
+- **Windows**: `%APPDATA%\sshm\backups\` (fallback: `%USERPROFILE%\.config\sshm\backups\`)
+
+**Key Features:**
+- Automatic backup before any modification
+- One backup per file (overwrites previous backup)
+- Stored separately to avoid SSH Include conflicts
+- Easy manual recovery if needed
+
+**Additional Storage:**
+- **Connection History**: Stored in the same config directory for persistent tracking
+- **Port Forwarding History**: Saved configurations for quick reuse of common forwarding setups
+
+**Quick Recovery:**
+```bash
+# Unix/Linux/macOS
+cp ~/.config/sshm/backups/config.backup ~/.ssh/config
+
+# Windows
+copy "%APPDATA%\sshm\backups\config.backup" "%USERPROFILE%\.ssh\config"
+```
+
+### Configuration File Options
+
+By default, SSHM uses the standard SSH configuration file at `~/.ssh/config`. You can specify a different configuration file using the `-c` flag:
+
+```bash
+# Use custom config file in TUI mode
+sshm -c /path/to/custom/ssh_config
+
+# Use custom config file with commands
+sshm add hostname -c /path/to/custom/ssh_config
+sshm edit hostname -c /path/to/custom/ssh_config
+sshm move hostname -c /path/to/custom/ssh_config
+```
+
+### Advanced Features
+
+#### Host Movement Between Config Files
+
+SSHM provides a powerful `move` command to relocate SSH hosts between different configuration files. **This feature requires SSH Include directives to be present in your SSH configuration.**
+
+```bash
+# Move a host to another config file (requires Include directives)
+sshm move my-server
+
+# Move with custom config file (requires Include directives)
+sshm move my-server -c /path/to/custom/ssh_config
+```
+
+**⚠️ Important Requirements:**
+- **SSH Include directives must be present** in your SSH config file (either `~/.ssh/config` or the file specified with `-c`)
+- The config file must contain `Include` statements referencing other SSH configuration files
+- Without Include directives, the move command will display an error message
+
+**Features:**
+- **Interactive file selector** - Choose destination config file from Include directives
+- **Include support** - Works seamlessly with SSH Include directives structure
+- **Atomic operations** - Safe host movement with automatic backups
+- **Validation** - Prevents conflicts and ensures configuration integrity
+- **Error handling** - Clear messages when Include files are needed but not found
+
+**Use Cases:**
+- Reorganize hosts from main config to specialized include files
+- Move development hosts to separate environment-specific configs
+- Consolidate configurations for better organization
+
+**Example Setup Required:**
+Your main SSH config file must contain Include directives like:
+```ssh
+# ~/.ssh/config
+Include ~/.ssh/config.d/*
+Include work-servers.conf
+Include projects/*.conf
+
+Host personal-server
+    HostName personal.example.com
+    User myuser
+```
+
+#### Real-time Connectivity Status
+
+SSHM features asynchronous SSH connectivity checking that provides visual indicators of host availability:
+
+**Status Indicators:**
+- 🟢 **Online** - SSH connection successful (shows response time)
+- 🟡 **Connecting** - Currently testing connectivity
+- 🔴 **Offline** - SSH connection failed or host unreachable
+- ⚫ **Unknown** - Status not yet determined
+
+**Features:**
+- **Non-blocking checks** - Status updates happen in the background
+- **Response time tracking** - See connection latency for online hosts
+- **Automatic refresh** - Status indicators update continuously
+- **Error details** - Detailed error information for failed connections
+
+#### Automatic Update Checking
+
+SSHM includes built-in version checking that notifies you of available updates:
+
+**Features:**
+- **Background checking** - Version check happens asynchronously
+- **Release notifications** - Clear indicators when updates are available
+- **Pre-release detection** - Identifies beta and development versions
+- **GitHub integration** - Direct links to release pages
+- **Non-intrusive** - Updates don't interrupt your workflow
+
+**Update notifications appear:**
+- In the main TUI interface as a subtle notification
+- In the `sshm --version` command output
+- Only when a newer stable version is available
+
+#### Port Forwarding History
+
+SSHM remembers your port forwarding configurations for easy reuse:
+
+**Features:**
+- **Automatic saving** - Successful forwarding setups are saved automatically
+- **Quick reuse** - Previously used configurations appear as suggestions
+- **Per-host history** - Forwarding history is tracked per SSH host
+- **All forward types** - Supports Local (-L), Remote (-R), and Dynamic (-D) forwarding history
+- **Persistent storage** - History survives application restarts
+
+### Platform-Specific Notes
+
+**Windows:**
+- SSHM works with the built-in OpenSSH client (Windows 10/11)
+- Configuration file location: `%USERPROFILE%\.ssh\config`
+- Compatible with WSL SSH configurations
+- Supports the same SSH options as Unix systems
+
+**Unix/Linux/macOS:**
+- Standard SSH configuration file: `~/.ssh/config`
+- Full compatibility with OpenSSH features
+- Preserves file permissions automatically
+
+## 🏗️ Configuration
+
+SSHM works directly with your standard SSH configuration file (`~/.ssh/config`). It adds special comment tags for enhanced functionality while maintaining full compatibility with standard SSH tools.
+
+### SSH Include Support
+
+SSHM fully supports SSH Include directives, allowing you to organize your SSH configurations across multiple files. This is particularly useful for managing large numbers of hosts or organizing configurations by environment, project, or team.
+
+**Include Examples:**
+```ssh
+# Main ~/.ssh/config file
+Host personal-server
+    HostName personal.example.com
+    User myuser
+
+# Include work-related configurations
+Include work-servers.conf
+
+# Include all configurations from a directory
+Include projects/*
+
+# Include with relative paths
+Include ~/.ssh/configs/production.conf
+```
+
+**Organization Examples:**
+
+*work-servers.conf:*
+```ssh
+# Tags: work, production
+Host prod-web-01
+    HostName 10.0.1.10
+    User deploy
+    ProxyJump bastion.company.com
+
+# Tags: work, staging  
+Host staging-api
+    HostName staging-api.company.com
+    User developer
+```
+
+*projects/client-alpha.conf:*
+```ssh
+# Tags: client, development
+Host client-alpha-dev
+    HostName dev.client-alpha.com
+    User admin
+    Port 2222
+```
+
+**Example configuration:**
+Include ~/.ssh/conf.d/*
+
+```ssh
+# Tags: production, web, frontend
+Host web-prod-01
+    HostName 192.168.1.10
+    User deploy
+    Port 22
+    IdentityFile ~/.ssh/production_key
+    Compression yes
+    ServerAliveInterval 60
+
+# Tags: development, database
+Host db-dev
+    HostName dev-db.company.com
+    User admin
+    Port 2222
+    IdentityFile ~/.ssh/dev_key
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+
+# Tags: production, backend
+Host backend-prod
+    HostName 10.0.1.50
+    User app
+    Port 22
+    ProxyJump bastion.company.com
+    IdentityFile ~/.ssh/production_key
+    Compression yes
+    ServerAliveInterval 300
+    BatchMode yes
+```
+
+### Supported SSH Options
+
+SSHM supports all standard SSH configuration options:
+
+**Built-in Fields:**
+- `HostName` - Server hostname or IP address
+- `User` - Username for SSH connection
+- `Port` - SSH port number
+- `IdentityFile` - Path to private key file
+- `ProxyJump` - Jump server for connection tunneling (e.g., `user@jumphost:port`)
+- `Tags` - Custom tags (SSHM extension)
+
+**Additional SSH Options:**
+You can add any valid SSH option using the "SSH Options" field in the interactive forms. Enter them in command-line format (e.g., `-o Compression=yes -o ServerAliveInterval=60`) and SSHM will automatically convert them to the proper SSH config format.
+
+**Common SSH Options:**
+- `Compression` - Enable/disable compression (`yes`/`no`)
+- `ServerAliveInterval` - Interval in seconds for keepalive messages
+- `ServerAliveCountMax` - Maximum number of keepalive messages
+- `StrictHostKeyChecking` - Host key verification (`yes`/`no`/`ask`)
+- `UserKnownHostsFile` - Path to known hosts file
+- `BatchMode` - Disable interactive prompts (`yes`/`no`)
+- `ConnectTimeout` - Connection timeout in seconds
+- `ControlMaster` - Connection multiplexing (`yes`/`no`/`auto`)
+- `ControlPath` - Path for control socket
+- `ControlPersist` - Keep connection alive duration
+- `ForwardAgent` - Forward SSH agent (`yes`/`no`)
+- `LocalForward` - Local port forwarding (e.g., `8080:localhost:80`)
+- `RemoteForward` - Remote port forwarding
+- `DynamicForward` - SOCKS proxy port forwarding
+
+**Example usage in forms:**
+```
+SSH Options: -o Compression=yes -o ServerAliveInterval=60 -o StrictHostKeyChecking=no
+```
+
+This will be automatically converted to:
+```ssh
+    Compression yes
+    ServerAliveInterval 60
+    StrictHostKeyChecking no
+```
+
+### Custom Key Bindings
+
+SSHM supports customizable key bindings through a configuration file. This is particularly useful for users who want to modify the default quit behavior.
+
+**Configuration File Location:**
+- **Linux/macOS**: `~/.config/sshm/config.json`
+- **Windows**: `%APPDATA%\sshm\config.json`
+
+**Example Configuration:**
+```json
+{
+  "key_bindings": {
+    "quit_keys": ["q", "ctrl+c"],
+    "disable_esc_quit": true
+  }
+}
+```
+
+**Available Options:**
+- **quit_keys**: Array of keys that will quit the application. Default: `["q", "ctrl+c"]`
+- **disable_esc_quit**: Boolean flag to disable ESC key from quitting the application. Default: `false`
+
+**For Vim Users:**
+If you frequently press ESC accidentally causing the application to quit, set `disable_esc_quit` to `true`. This will disable ESC as a quit key while preserving all other functionality.
+
+**Default Configuration:**
+If no configuration file exists, SSHM will automatically create one with default settings that maintain backward compatibility.
+
+## 🛠️ Development
+
+### Prerequisites
+
+- Go 1.23+ 
+- Git
+
+### Build from Source
+
+```bash
+# Clone the repository
+git clone https://github.com/Gu1llaum-3/sshm.git
+cd sshm
+
+# Build the binary
+go build -o sshm .
+
+# Run
+./sshm
+```
+
+### Project Structure
+
+```
+sshm/
+├── main.go             # Application entry point
+├── cmd/                # CLI commands (Cobra)
+│   ├── root.go         # Root command and interactive mode
+│   ├── add.go          # Add host command
+│   ├── edit.go         # Edit host command
+│   ├── move.go         # Move host command
+│   └── search.go       # Search command
+├── internal/
+│   ├── config/         # SSH configuration management
+│   │   └── ssh.go      # Config parsing and manipulation
+│   ├── connectivity/   # SSH connectivity checking
+│   │   └── ping.go     # Asynchronous SSH ping functionality
+│   ├── history/        # Connection history tracking
+│   │   ├── history.go  # History management and last login tracking
+│   │   └── port_forward_test.go # Port forwarding history tests
+│   ├── version/        # Version checking and updates
+│   │   ├── version.go  # GitHub release checking and version comparison
+│   │   └── version_test.go # Version parsing and comparison tests
+│   ├── ui/             # Terminal UI components (Bubble Tea)
+│   │   ├── tui.go      # Main TUI interface and program setup
+│   │   ├── model.go    # Core TUI model and state
+│   │   ├── update.go   # Message handling and state updates
+│   │   ├── view.go     # UI rendering and layout
+│   │   ├── table.go    # Host list table component with status indicators
+│   │   ├── add_form.go # Add host form interface
+│   │   ├── edit_form.go# Edit host form interface
+│   │   ├── move_form.go# Move host form interface
+│   │   ├── port_forward_form.go # Port forwarding setup with history
+│   │   ├── styles.go   # Lip Gloss styling definitions
+│   │   ├── sort.go     # Sorting and filtering logic
+│   │   └── utils.go    # UI utility functions
+│   └── validation/     # Input validation
+│       └── ssh.go      # SSH config validation
+├── images/             # Documentation assets
+│   ├── logo.png        # Project logo
+│   └── sshm.gif        # Demo animation
+├── install/            # Installation scripts
+│   ├── unix.sh         # Unix/Linux/macOS installer
+│   └── README.md       # Installation guide
+├── .github/            # GitHub configuration
+│   ├── copilot-instructions.md # Development guidelines
+│   └── workflows/      # CI/CD pipelines
+│       └── build.yml   # Multi-platform builds
+├── go.mod              # Go module definition
+├── go.sum              # Go module checksums
+├── LICENSE             # MIT license
+└── README.md           # Project documentation
+```
+
+### Dependencies
+
+- [Cobra](https://github.com/spf13/cobra) - CLI framework
+- [Bubble Tea](https://github.com/charmbracelet/bubbletea) - TUI framework
+- [Bubbles](https://github.com/charmbracelet/bubbles) - TUI components
+- [Lipgloss](https://github.com/charmbracelet/lipgloss) - Styling
+- [Go Crypto SSH](https://golang.org/x/crypto/ssh) - SSH connectivity checking
+
+## 📦 Releases
+
+Automated releases are built for multiple platforms:
+
+| Platform | Architecture | Download |
+|----------|-------------|----------|
+| Linux | AMD64 | [sshm-linux-amd64.tar.gz](https://github.com/Gu1llaum-3/sshm/releases/latest/download/sshm-linux-amd64.tar.gz) |
+| Linux | ARM64 | [sshm-linux-arm64.tar.gz](https://github.com/Gu1llaum-3/sshm/releases/latest/download/sshm-linux-arm64.tar.gz) |
+| macOS | Intel | [sshm-darwin-amd64.tar.gz](https://github.com/Gu1llaum-3/sshm/releases/latest/download/sshm-darwin-amd64.tar.gz) |
+| macOS | Apple Silicon | [sshm-darwin-arm64.tar.gz](https://github.com/Gu1llaum-3/sshm/releases/latest/download/sshm-darwin-arm64.tar.gz) |
+| Windows | AMD64 | [sshm-windows-amd64.zip](https://github.com/Gu1llaum-3/sshm/releases/latest/download/sshm-windows-amd64.zip) |
+| Windows | ARM64 | [sshm-windows-arm64.zip](https://github.com/Gu1llaum-3/sshm/releases/latest/download/sshm-windows-arm64.zip) |
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+### Development Workflow
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Charm](https://charm.sh/) for the amazing TUI libraries
+- [Cobra](https://cobra.dev/) for the excellent CLI framework
+- [@yimeng](https://github.com/yimeng) for contributing SSH Include directive support
+- [@ldreux](https://github.com/ldreux) for contributing multi-word search functionality
+- [@qingfengzxr](https://github.com/qingfengzxr) for contributing custom key bindings support
+- The Go community for building such fantastic tools
 
 ---
 
-## 🚀 快速开始：使用 `dotm` 部署
+<div align="center">
 
-我们引入了一个全新的 Go 工具 `dotm` (位于 `scripts/dotm` 目录) 来替代旧的 `setup.sh` 脚本，提供更强大、更灵活的部署体验。
+**Made with ❤️ by [Guillaume](https://github.com/Gu1llaum-3)**
 
-在新机器上部署分为两步：
+⭐ **Star this repo if you found it useful!** ⭐
 
-#### 第 1 步：编译工具并同步 Dotfiles
-
-首先，我们需要编译 `dotm` 工具，然后使用它来克隆并检出您的配置文件。
-
-```bash
-# 编译 dotm 工具
-cd scripts/dotm
-go build
-
-# 使用 dotm 同步您的裸仓库
-# 请将 URL 替换为您自己的仓库地址
-./dotm repo sync --url git@github.com:w31r4/dotfiles.git
-```
-
-#### 第 2 步：按需安装软件环境
-
-`dotm` 的核心是 `scripts/dotm/config.yaml` 文件，它现在是您所有软件和环境的“清单”。您可以按需安装任何在其中定义的模块。
-
-```bash
-# 安装单个模块
-./dotm install zsh
-
-# 一次性安装多个核心模块
-./dotm install zsh pyenv go fzf eza
-
-# 您可以随时通过 `dotm module list` 查看所有可安装的模块
-./dotm module list
-```
-
-部署完成后，请重新加载您的 Shell (`exec zsh -l`) 以使所有变更生效。关于 `dotm` 的更多高级用法（如添加/删除模块），请参阅 `scripts/dotm/README_zh-CN.md`。
-
----
-
-## 🔧 手动部署步骤
-
-如果你希望分步理解或执行，以下是核心步骤：
-
-#### 1. 克隆裸仓库
-
-```bash
-git clone --bare git@github.com:w31r4/dotfiles.git "$HOME/.dotfiles"
-```
-
-#### 2. 设置 `config` 别名
-
-```bash
-# 创建临时别名
-alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-
-# 将别名永久写入 Zsh 配置文件
-echo "alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> ~/.zshrc
-
-# 立即应用
-source ~/.zshrc
-```
-
-#### 3. 检出 (Checkout) 配置文件
-
-```bash
-# 配置仓库，使其不显示未追踪的文件
-config config --local status.showUntrackedFiles no
-
-# 尝试检出
-config checkout
-
-# 如果检出失败（因为覆盖了现有文件），则先备份冲突文件，再重新检出
-if [ $? != 0 ]; then
-  echo "Backing up pre-existing dot files to ~/.dotfiles-backup..."
-  mkdir -p ~/.dotfiles-backup
-  config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} sh -c 'mkdir -p ~/.dotfiles-backup/$(dirname "{}") && mv "{}" ~/.dotfiles-backup/"{}"'
-fi
-
-# 再次检出
-config checkout
-```
-
-#### 4. 初始化子模块
-
-```bash
-# 初始化 oh-my-tmux 子模块 (TPM 已包含在内)
-config submodule update --init --recursive
-
-# 启动 tmux 后，按 <prefix> + I 安装插件
-tmux
-```
-
----
-
-## 日常使用
-
-管理 Dotfiles 就像管理任何一个 Git 项目一样简单。
-
-#### 将所有修改过的文件加入暂存区
-```bash
-config add -u
-```
-
-#### 提交更新
-```bash
-config commit -m "更新了 [相关组件] 的配置"
-config push
-```
-
----
-
-## 📜 附录：方案详解
-
-### 第一部分：什么是 Dotfiles？我们为什么要关心它？
-
-在 Linux 或 macOS 系统中，很多程序的配置文件都以点 (`.`) 开头，比如 `~/.zshrc`, `~/.vimrc`, `~/.gitconfig`。它们决定了你的工具和工作环境的外观、行为和快捷方式，是你花费大量时间精心调教出的“个性化设置”。
-
-管理它们的理由：
-1.  **环境一致性**：在任何设备上都拥有一致的快捷键、别名和主题。
-2.  **备份与恢复**：电脑损坏或系统重装后，能迅速找回你的个性化配置。
-3.  **分享与学习**：可以把你的配置分享给他人，也可以从 GitHub 上的“大神”那里学习最佳实践。
-
-### 第二部分：核心思想 —— “裸仓库” (Bare Repository) 方案
-
-直接在 Home 目录 (`~`) 下 `git init` 会是个灾难，因为它会试图追踪所有文件。**裸仓库方案**则非常巧妙。
-
-我们创建一个特殊的 Git 仓库（裸仓库），它的 `.git` 目录独立存放（例如在 `~/.dotfiles`）。然后，我们通过一个别名 `config`，“欺骗”Git，让它在你的 Home 目录 (`~`) 下工作，但版本记录却存储在那个独立的裸仓库里。
-
-这样做的好处是，Git 系统**只会关心你明确让它追踪的文件**，而完全忽略 Home 目录下的其他所有文件。干净、优雅、无副作用。
-
-### 第三部分：环境自动化进阶 (全新 `dotm` 方案)
-
-> **Dotfiles (配置文件) + Installation Tool (`dotm`) = 终极开发环境**
-
-过去，我们推荐使用 `Brewfile` 或 `apt` 命令来管理软件包列表。现在，这个过程已被 `dotm` 的模块化系统完全取代。
-
-您所有的软件安装需求，都统一在 `scripts/dotm/config.yaml` 文件中以“模块”的形式进行管理。
-
-**`config.yaml` 的优势：**
-
-- **统一管理**：无论是 macOS 还是 Linux，所有软件安装逻辑都在一个文件中。
-- **声明式**：清晰地定义了软件的检查方法、安装命令和依赖关系。
-- **版本可控**：`config.yaml` 本身也通过 Git 进行版本控制。
-- **可扩展**：通过 `dotm module add` 命令，您可以轻松地向“仓库”中添加新软件，而无需编写复杂的脚本。
-
-这个新的方案，将“安装脚本”本身也变成了“配置文件”，是“配置即代码”理念的终极体现。
-
-----------------------------------------------------
-
-### 课程大纲
-
-1.  **第一部分：什么是 Dotfiles？我们为什么要关心它？**
-      * 理解配置文件的本质和重要性。
-2.  **第二部分：核心思想 —— “裸仓库” (Bare Repository) 方案**
-      * 理解为什么这个方案比其他方法更巧妙。
-3.  **第三部分：手把手实战 —— 在你的第一台电脑上配置**
-      * 从零开始，一步步执行命令，建立你的 Dotfiles 管理系统。
-4.  **第四部分：大功告成 —— 在新电脑上快速恢复配置**
-      * 体会这个方案带来的真正威力：在新机器上瞬间“登录”你的个性化环境。
-
------
-
-### 第一部分：什么是 Dotfiles？我们为什么要关心它？
-
-#### 什么是 Dotfiles？
-
-在 Linux 或 macOS 系统中，很多程序的配置文件都以点（`.`）开头，比如：
-
-  * `~/.bashrc` 或 `~/.zshrc` (你的 Shell 配置)
-  * `~/.vimrc` (Vim 编辑器的配置)
-  * `~/.gitconfig` (Git 的全局配置)
-
-这些文件决定了你的工具和工作环境的外观、行为和快捷方式。它们是你花费了大量时间和精力，精心调教出的最顺手的“个性化设置”。
-
-#### 为什么要管理它们？
-
-1.  **环境一致性**：当你在家里的电脑、公司的电脑，或者新买的 Mac 上工作时，你希望所有的快捷键、别名（alias）、主题都保持一致。
-2.  **备份与恢复**：如果你的电脑坏了，或者系统重装了，这些个性化配置会全部丢失。把它们管起来，就等于有了一个云端备份。
-3.  **分享与学习**：你可以把你的配置分享给朋友，也可以从 GitHub 上那些“大神”的 Dotfiles 中学习他们的最佳实践。
-
------
-
-### 第二部分：核心思想 —— “裸仓库” (Bare Repository) 方案
-
-管理 Dotfiles 最直观的想法是在 Home 目录（`~`）下直接 `git init`，但这会是个灾难。因为它会试图追踪你 Home 目录下的所有文件，导致 `git status` 变得混乱不堪。
-
-而 Atlassian 教程介绍的**裸仓库方案**非常巧妙。
-
-**核心思想是：**
-
-我们创建一个特殊的 Git 仓库（裸仓库），它的 `.git` 目录不和你的项目文件放在一起，而是独立存放。然后，我们通过一个**别名（alias）**，“欺骗”Git，让它在你的 Home 目录 (`~`) 下工作，但版本记录却存储在那个独立的裸仓库里。
-
-**打个比方：**
-
-  * **普通 `git init`**：就像你在一个文件夹里同时存放了“工作文件”和“版本记录档案室 (`.git`)”。
-  * **裸仓库方案**：你把“版本记录档案室”建在了别处（比如 `~/.dotfiles`），然后给你的“档案管理员 (Git)”一个特殊的指令，让他去你的“主办公区 (`~`)”整理文件，但把所有档案都放回那个独立的档案室。
-
-这样做的好处是，这个 Git 系统**只会关心你明确让它追踪的文件**（比如 `.zshrc`），而完全忽略你 Home 目录下的其他所有文件和文件夹。干净、优雅、无副作用。
-
------
-
-### 第三部分：手把手实战 —— 在你的第一台电脑上配置
-
-现在，我们来动手实现它。
-
-#### 第 1 步：创建裸仓库
-
-首先，我们要在 Home 目录下创建一个地方来存放版本记录。
-打开你的终端，运行：
-
-```bash
-git init --bare $HOME/.dotfiles
-```
-
-  * `git init --bare`：创建一个裸仓库（只有版本信息，没有工作区文件）。
-  * `$HOME/.dotfiles`：存放这个仓库的地方。你可以叫任何名字，但 `.dotfiles` 是一个常见的约定。
-
-#### 第 2 步：创建核心别名 (Alias)
-
-这是最关键的一步。我们将创建一个名为 `config` 的新命令，它本质上是 Git，但只为我们的 Dotfiles 工作。
-
-```bash
-alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-```
-
-让我们分解一下这个命令：
-
-  * `alias config=...`：创建一个名为 `config` 的临时别名。
-  * `--git-dir=$HOME/.dotfiles/`：告诉 Git，版本库（`.git` 目录）在 `~/.dotfiles`。
-  * `--work-tree=$HOME`：告诉 Git，要操作的文件在 Home 目录 (`~`)。
-
-**为了让这个别名永久生效**，你需要把它添加到你的 Shell 配置文件中。
-如果你用的是 Bash，就添加到 `~/.bashrc`：
-
-```bash
-echo "alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> ~/.bashrc
-source ~/.bashrc
-```
-
-如果你用的是 Zsh，就添加到 `~/.zshrc`：
-
-```bash
-echo "alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> ~/.zshrc
-source ~/.zshrc
-```
-
-现在，`config` 命令就可以像 `git` 一样使用了，但它只为你的 Dotfiles 服务！
-
-#### 第 3 步：配置仓库，避免混乱
-
-默认情况下，`config status` 会显示你 Home 目录下所有未被追踪的文件，这同样会造成信息爆炸。我们用下面的命令让它只显示我们手动添加（`add`）过的文件。
-
-```bash
-config config --local status.showUntrackedFiles no
-```
-
-#### 第 4 步：开始追踪你的第一个 Dotfile！
-
-现在，我们可以像使用普通 Git 一样，开始追踪你的配置文件了。
-
-1.  **检查状态**：
-    ```bash
-    config status
-    ```
-2.  **添加文件**（比如你的 `.bashrc` 和 `.gitconfig`）：
-    ```bash
-    config add .bashrc
-    config add .gitconfig
-    ```
-3.  **提交更改**：
-    ```bash
-    config commit -m "Add initial bashrc and gitconfig"
-    ```
-4.  **推送到远程仓库** (例如 GitHub)：
-      * 先在 GitHub 上创建一个新的**私有**仓库（比如叫 `dotfiles`）。
-      * 然后回到终端，关联远程仓库并推送：
-    <!-- end list -->
-    ```bash
-    config remote add origin git@github.com:<你的用户名>/dotfiles.git
-    config push -u origin main
-    ```
-
-恭喜！你的 Dotfiles 已经成功备份到云端了。之后每当你修改了配置，只需要 `config add`, `config commit`, `config push` 即可。
-
------
-
-### 第四部分：大功告成 —— 在新电脑上快速恢复配置
-
-这才是这个方案真正闪光的地方！假设你换了一台新电脑。
-
-#### 第 1 步：克隆你的裸仓库
-
-在新电脑的终端上，把你的配置仓库克隆下来：
-
-```bash
-git clone --bare git@github.com:<你的用户名>/dotfiles.git $HOME/.dotfiles
-```
-
-#### 第 2 步：设置别名
-
-和之前一样，设置 `config` 别名，并让它永久生效。
-
-```bash
-# Bash 用户
-echo "alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> ~/.bashrc
-source ~/.bashrc
-
-# Zsh 用户
-echo "alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> ~/.zshrc
-source ~/.zshrc
-```
-
-#### 第 3 步：检出 (Checkout) 你的配置文件
-
-现在，用一个命令把你所有的配置“激活”到 Home 目录下：
-
-```bash
-config checkout
-```
-
-**注意：** 这一步很可能会报错！比如 `error: The following untracked working tree files would be overwritten by checkout...`。
-
-这是因为新系统自带了一些默认的配置文件（比如 `.bashrc`），Git 为了安全，拒绝覆盖它们。
-
-**解决方案：** 教程里给出了一个很棒的备份脚本。我们先创建一个备份文件夹，然后把冲突的文件移进去。
-
-```bash
-mkdir -p .dotfiles-backup
-config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} sh -c 'mkdir -p ".dotfiles-backup/$(dirname "{}")" && mv "{}" ".dotfiles-backup/{}"'
-```
-
-这个命令会找出所有冲突的文件，然后把它们移动到 `.dotfiles-backup` 文件夹里。
-
-现在，再次执行 checkout 就没问题了：
-
-```bash
-config checkout
-```
-
-#### 第 4 步：完成收尾工作
-
-最后，别忘了再次设置 `status.showUntrackedFiles`：
-
-```bash
-config config --local status.showUntrackedFiles no
-```
-
-**现在，你的新电脑已经拥有了和你之前完全一致的、高度个性化的工作环境！**
-
------
-
-### 总结
-
-你已经学会了一种管理 Dotfiles 的最佳实践。
-
-  * **核心命令**：`config` (一个特殊的 Git 别名)
-  * **日常工作流**：修改配置 -\> `config add` -\> `config commit` -\> `config push`
-  * **新环境部署**：`git clone --bare` -\> 设置别名 -\> `config checkout`
-
-这套流程不仅能让你在多台设备间保持同步，更是一种专业的开发者习惯。希望这篇“教学版”的教程对你有帮助！
-
-
-  * **第一层：备份“配置” (Dotfiles)。** 这解决了“我的软件设置是什么样的？”的问题。
-  * **第二层：备份“环境描述” (软件和库)。** 这解决了“我的工作环境由哪些软件组成？”的问题。
-
-只做第一层，换新电脑时你依然需要花大量时间去回忆、搜索、安装你所依赖的几十上百个工具。
-
-真正的“一键迁移环境”，需要将两者结合。解决方案就是：
-**在你的 Dotfiles 仓库中，再加入一份“软件安装脚本”。**
-
------
-
-### 解决方案：配置文件 (Dotfiles) + 安装脚本 (Installation Scripts)
-
-这个想法的核心是：**不要备份软件本身，而是备份一个能够自动安装这些软件的“清单”或“脚本”**。
-
-这样做的好处是：
-
-  * **轻量：** 脚本和清单只是文本文件，很小。
-  * **永远最新：** 在新电脑上运行时，脚本会通过包管理器（如 Homebrew, APT）安装最新版本的软件。
-  * **自动化：** 将数小时的手动安装工作，变成一条命令。
-
-
-
-### 2\. 对于 Linux (Debian/Ubuntu, 使用 APT)
-
-Linux 上虽然没有像 `brew bundle` 这样统一的工具，但原理一样。
-
-**步骤一：生成你手动安装的软件包清单**
-
-在**旧电脑**上，运行：
-
-```bash
-# 这会将你明确手动安装过的软件列表，保存到 packages.list 文件中
-apt-mark showmanual > packages.list
-```
-
-`apt-mark showmanual` 比 `apt list --installed` 更好，因为它排除了作为依赖项被自动安装的包，列表更干净。
-
-**步骤二：将 `packages.list` 添加到你的 Dotfiles 仓库**
-
-```bash
-config add packages.list
-config commit -m "Add Debian packages list"
-config push
-```
-
-**步骤三：在新 Linux 电脑上恢复环境**
-
-1.  克隆你的 dotfiles 仓库。
-2.  运行恢复命令：
-    ```bash
-    # 更新源后，从 packages.list 文件中读取列表并一次性全部安装
-    sudo apt-get update
-    sudo xargs -a packages.list apt-get install -y
-    ```
-
-**对于非 APT 安装的软件**（比如用 `curl` 安装的 Starship, NVM 等），你需要手动编写一个安装脚本，例如 `install.sh`，并把它也加入 Dotfiles 仓库。
-
-```sh
-#!/bin/bash
-# install.sh for Debian/Ubuntu
-
-echo "Installing custom software..."
-
-# 安装 Starship Prompt
-curl -sS https://starship.rs/install.sh | sh
-
-# 安装 NVM (Node Version Manager)
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-
-echo "Custom software installation complete."
-```
-
------
-
-### 3\. 对于 Windows (使用 Winget 或 Scoop)
-
-Windows 上的现代化包管理器也能做到这一点。
-
-  * **Winget (系统自带):**
-      * **导出：** `winget export -o packages.json`
-      * **导入：** `winget import -i packages.json`
-  * **Scoop / Chocolatey:** 也有类似的导出/导入已安装软件列表的机制。
-
------
-
-### 最终形态：一个无敌的 `setup.sh` 脚本
-
-最专业的玩家会在他们的 Dotfiles 仓库里创建一个总控安装脚本，比如 `setup.sh`。
-
-当你拿到一台新电脑时，你只需要做两件事：
-
-1.  `git clone <你的 dotfiles 仓库>`
-2.  `cd dotfiles && ./setup.sh`
-
-这个 `setup.sh` 脚本会自动：
-
-1.  **识别操作系统** (macOS, Linux, etc.)。
-2.  **调用对应的安装流程** (运行 `brew bundle`, `apt-get install` 等)。
-3.  **自动部署配置文件** (例如，使用 `stow` 或一个简单的脚本，将 `.zshrc` 等文件创建符号链接到 Home 目录下)。
-
-**结论：**
-
-你的直觉完全正确。一个真正可移植、一键恢复的开发环境，需要两条腿走路：
-
-> **Dotfiles (配置文件) + Installation Scripts (安装脚本) = 终极开发环境**
-
-现在，你的 Dotfiles 仓库就从一个单纯的“配置备份”，进化成了一个强大的“自动化环境部署平台”。
+</div>

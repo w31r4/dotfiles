@@ -20,6 +20,7 @@ plugins=(
   you-should-use zsh-history-substring-search
   fzf web-search vscode
   zsh-nvm npm history docker httpie copybuffer eza
+  fzf-tab
 )
 
 source "$ZSH/oh-my-zsh.sh"   # OMZ 会调用 compinit，无需重复
@@ -119,3 +120,11 @@ y() {
   [[ -n "$cwd" && "$cwd" != "$PWD" ]] && builtin cd -- "$cwd"
   rm -f -- "$tmp"
 }
+
+# pnpm
+export PNPM_HOME="/home/zenfun/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

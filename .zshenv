@@ -16,3 +16,4 @@ export GOPATH=${GOPATH:-$HOME/go}
 [ -d "$GOPATH/bin" ] && path=("$GOPATH/bin" $path)
 export XDG_CONFIG_HOME="$HOME/.config"
 
+. "$HOME/.cargo/env"
