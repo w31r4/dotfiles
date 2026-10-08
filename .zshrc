@@ -15,7 +15,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 plugins=(
   git git-commit git-extras gitignore sudo
   zsh-syntax-highlighting zsh-autosuggestions
-  zsh-pipx poetry poetry-env
+  poetry poetry-env
   pyenv python golang
   you-should-use zsh-history-substring-search
   fzf web-search vscode
@@ -23,7 +23,9 @@ plugins=(
   fzf-tab
 )
 
-source "$ZSH/oh-my-zsh.sh"   # OMZ 会调用 compinit，无需重复
+if [[ -r "$ZSH/oh-my-zsh.sh" ]]; then
+  source "$ZSH/oh-my-zsh.sh"   # OMZ 会调用 compinit，无需重复
+fi
 
 # P10k 主题（instant prompt 已在最上面）
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
@@ -33,7 +35,9 @@ bindkey "$terminfo[kcuu1]" history-substring-search-up
 bindkey "$terminfo[kcud1]" history-substring-search-down
 
 # pyenv 交互期初始化（与 --path 配合）
-eval "$(pyenv init - zsh)"
+if command -v pyenv >/dev/null 2>&1; then
+  eval "$(pyenv init - zsh)"
+fi
 
 # 常用别名（存在性判断更稳）
 command -v batcat >/dev/null && alias cat="batcat"
@@ -112,7 +116,9 @@ fi
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 # zoxide / yazi
-eval "$(zoxide init zsh)"
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
 y() {
   local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
   yazi "$@" --cwd-file="$tmp"
@@ -122,7 +128,7 @@ y() {
 }
 
 # pnpm
-export PNPM_HOME="/home/zenfun/.local/share/pnpm"
+export PNPM_HOME="${PNPM_HOME:-$HOME/.local/share/pnpm}"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;

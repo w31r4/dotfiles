@@ -111,10 +111,10 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-. "$HOME/.cargo/env"
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
-export NEMU_HOME=/home/zenfun/workspace/ics2024/nemu
+export NEMU_HOME="${NEMU_HOME:-$HOME/workspace/ics2024/nemu}"
 
-export AM_HOME=/home/zenfun/workspace/ics2024/abstract-machine
+export AM_HOME="${AM_HOME:-$HOME/workspace/ics2024/abstract-machine}"
 
 [ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.

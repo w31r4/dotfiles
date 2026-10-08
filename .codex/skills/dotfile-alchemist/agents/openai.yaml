@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dotfile Alchemist"
+  short_description: "Restore and tune dotfiles safely on macOS"
+  default_prompt: "Use $dotfile-alchemist to restore my dotfiles and validate the shell."

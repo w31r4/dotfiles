@@ -69,6 +69,16 @@ config pull --rebase
 - 不想看到 `$HOME` 里一堆 untracked：`config config --local status.showUntrackedFiles no`
 - 子模块更新：`config submodule update --init --recursive`
 
+## Codex skill
+
+本仓库附带 `dotfile-alchemist` skill，路径为 `~/.codex/skills/dotfile-alchemist/`。它会按这套裸仓库流程恢复 dotfiles，并针对 macOS、Homebrew、uv 和 tmux 做兼容检查。
+
+在 Codex 中可以直接使用：
+
+```text
+用 $dotfile-alchemist 恢复我的 dotfiles
+```
+
 ## 本机私有文件（不要提交）
 
 这个仓库刻意不追踪/忽略以下内容（以及其他任何 token/密钥）：

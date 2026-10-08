@@ -1,8 +1,16 @@
-# pipx / pyenv（--path 只在登录期放这里）
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"   # pyenv 官方建议：--path 放在 zprofile 登录阶段
-# ↑ pyenv 从 2021 起把 PATH 设置与 shims 初始化拆分了，需要这行。:contentReference[oaicite:7]{index=7}
+# macOS / Homebrew
+if [[ "$(uname -s)" == "Darwin" && -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+  export PATH="/opt/homebrew/opt/python@3.14/libexec/bin:$PATH"
+fi
+export PATH="$HOME/go/bin:$PATH"
+
+# pyenv（仅在实际安装时初始化；本机 Python/虚拟环境以 uv 为主）
+if command -v pyenv >/dev/null 2>&1; then
+  export PYENV_ROOT="${PYENV_ROOT:-$HOME/.pyenv}"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init --path)"
+fi
 
 # --- Robust WSL detection + hostname allowlist + proxy switch ---
 
@@ -55,4 +63,3 @@ if command -v keychain >/dev/null 2>&1; then
     eval "$(keychain --eval --quiet --agents ssh "${keys[@]}")"
   fi
 fi
-

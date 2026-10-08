@@ -9,11 +9,9 @@ export LC_ALL=en_US.UTF-8
 typeset -U path PATH
 [ -d "$HOME/.local/bin" ] && path=("$HOME/.local/bin" $path)
 
-# Go 放在 zshenv，确保即使非交互也可用
-export GOROOT=${GOROOT:-/usr/local/go}
+# Go 放在 zshenv，确保即使非交互也可用；Go 会自行发现 Homebrew 的 GOROOT
 export GOPATH=${GOPATH:-$HOME/go}
-[ -d "$GOROOT/bin" ] && path=("$GOROOT/bin" $path)
 [ -d "$GOPATH/bin" ] && path=("$GOPATH/bin" $path)
 export XDG_CONFIG_HOME="$HOME/.config"
 
-. "$HOME/.cargo/env"
+[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
